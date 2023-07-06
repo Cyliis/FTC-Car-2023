@@ -42,6 +42,8 @@ public class ClosedLoopOpMode extends LinearOpMode {
 
         waitForStart();
 
+        carModules.imu.startIMUThread(this);
+
         for(LynxModule hub:hubs)
             hub.clearBulkCache();
 

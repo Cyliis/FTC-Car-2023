@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.teamcode.CarModules;
 import org.firstinspires.ftc.teamcode.ICarModule;
@@ -18,8 +20,30 @@ public class GamepadControl implements ICarModule {
         this.car = car;
     }
 
+    public static double correctionThreshold = 0.05;
+
+    private double targetHeading = 0;
+    public double pidCorrection = 0;
+
+    public static PIDCoefficients pidCoefficients = new PIDCoefficients(0,0,0);
+    private PIDController pid = new PIDController(pidCoefficients.p, pidCoefficients.i, pidCoefficients.d);
+
     private void steering(){
-        car.steering.setSteeringAngle(gamepad1.left_stick_x);
+
+        if(Math.abs(gamepad1.left_stick_x) > correctionThreshold) {
+            car.steering.setSteeringAngle(gamepad1.left_stick_x);
+            targetHeading = car.imu.getHeading();
+        }
+        else
+        {
+            pid.setPID(pidCoefficients.p, pidCoefficients.i, pidCoefficients.d);
+            pidCorrection = pid.calculate(car.imu.getHeading(), targetHeading);
+            pidCorrection = Math.min(1, pidCorrection);
+            pidCorrection = Math.max(-1, pidCorrection);
+            car.steering.setSteeringAngle(pidCorrection);
+        }
+
+
     }
 
     private void powerTrainControl(){

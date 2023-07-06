@@ -7,17 +7,21 @@ import org.firstinspires.ftc.teamcode.modules.PowerTrain;
 import org.firstinspires.ftc.teamcode.modules.PowerTrainClosedLoop;
 import org.firstinspires.ftc.teamcode.modules.PowerTrainOpenLoop;
 import org.firstinspires.ftc.teamcode.modules.Steering;
+import org.firstinspires.ftc.teamcode.utils.ImuModule;
 
 public class CarModules implements ICarModule{
 
     public PowerTrain pt;
     public Steering steering;
+    public ImuModule imu;
 
     public CarModules(HardwareMap hm, boolean closedLoopPowerTrain, boolean resetEncoders){
         if(closedLoopPowerTrain) pt = new PowerTrainClosedLoop(hm, resetEncoders);
         else pt = new PowerTrainOpenLoop(hm, resetEncoders);
 
         steering = new Steering(hm, resetEncoders);
+
+        imu = new ImuModule(hm);
     }
 
     @Override
