@@ -37,7 +37,7 @@ public class GamepadControl implements ICarModule {
         else
         {
             pid.setPID(pidCoefficients.p, pidCoefficients.i, pidCoefficients.d);
-            pidCorrection = pid.calculate(car.imu.getHeading(), targetHeading);
+            pidCorrection = Math.signum(gamepad1.right_trigger - gamepad1.left_trigger)*pid.calculate(car.imu.getHeading(), targetHeading);
             pidCorrection = Math.min(1, pidCorrection);
             pidCorrection = Math.max(-1, pidCorrection);
             car.steering.setSteeringAngle(pidCorrection);
