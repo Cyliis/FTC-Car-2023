@@ -27,9 +27,11 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation 'org.ftclib.ftclib:core:2.0.1' // core
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+    implementation 'com.github.Eeshwar-Krishnan:PhotonFTC:v2.0.4'
 }
 
 repositories {
     mavenCentral()
+    maven { url = 'https://jitpack.io' }
 }
 
