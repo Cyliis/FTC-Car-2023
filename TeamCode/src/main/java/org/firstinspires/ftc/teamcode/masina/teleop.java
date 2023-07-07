@@ -98,13 +98,20 @@ class SteeringCorrection{
 
         double currentHeading = imu.getHeading();
         pid.setPID(ps,is,ds);
-        double pidCorrection = pid.calculate(currentHeading,targetHeading);
+        double error1 = targetHeading - currentHeading;
+        double error2 = Math.signum(error1)*-1*(Math.PI*2 - Math.abs(error1));
+
+        if(Math.abs(error1) > Math.abs(error2)) error1 = error2;
+
+        double pidCorrection = pid.calculate(0,error1);
         pidCorrection = Math.min(1, pidCorrection);
         pidCorrection = Math.max(-1, pidCorrection);
         steering.steer(pidCorrection);
 
         telemetry.addData("currentHeading",currentHeading);
         telemetry.addData("targetHeading",targetHeading);
+        telemetry.addData("error1",error1);
+        telemetry.addData("error2",error2);
     }
 
 }
